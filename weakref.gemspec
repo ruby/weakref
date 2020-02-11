@@ -5,18 +5,15 @@ require "weakref/version"
 Gem::Specification.new do |spec|
   spec.name          = "weakref"
   spec.version       = Weakref::VERSION
-  spec.authors       = ["Hiroshi SHIBATA"]
-  spec.email         = ["hsbt@ruby-lang.org"]
+  spec.authors = ["Yukihiro Matsumoto"]
+  spec.email = ["matz@ruby-lang.org"]
 
   spec.summary       = %q{TODO: Write a short summary, because RubyGems requires one.}
   spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
-
-  spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
+  spec.homepage      = "https://github.com/ruby/weakref"
 
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "TODO: Put your gem's public repo URL here."
-  spec.metadata["changelog_uri"] = "TODO: Put your gem's CHANGELOG.md URL here."
+  spec.metadata["source_code_uri"] = "https://github.com/ruby/weakref"
   spec.license       = "BSD-2-Clause"
 
   # Specify which files should be added to the gem when it is released.
