@@ -1,4 +1,7 @@
 source "https://rubygems.org"
 
-# Specify your gem's dependencies in weakref.gemspec
 gemspec
+
+gem "bundler"
+gem "rake"
+gem "minitest"
