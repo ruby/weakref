@@ -4,4 +4,4 @@ gemspec
 
 gem "bundler"
 gem "rake"
-gem "minitest"
+gem "test-unit"
