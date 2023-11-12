@@ -36,13 +36,13 @@ class WeakRef < Delegator
     when true, false, nil
       @delegate_sd_obj = orig
     else
-      @@__map[self] = orig
+      weakref_map[self] = orig
     end
     super
   end
 
   def __getobj__ # :nodoc:
-    @@__map[self] or defined?(@delegate_sd_obj) ? @delegate_sd_obj :
+    weakref_map[self] or defined?(@delegate_sd_obj) ? @delegate_sd_obj :
       Kernel::raise(RefError, "Invalid Reference - probably recycled", Kernel::caller(2))
   end
 
@@ -53,6 +53,18 @@ class WeakRef < Delegator
   # Returns true if the referenced object is still alive.
 
   def weakref_alive?
-    @@__map.key?(self) or defined?(@delegate_sd_obj)
+    weakref_map.key?(self) or defined?(@delegate_sd_obj)
   end
+
+  def weakref_map
+    if defined?(::Object::Ractor)
+      if Ractor.current[:__WeakRef_map__].nil?
+        Ractor.current[:__WeakRef_map__] = ::ObjectSpace::WeakMap.new
+      end
+      Ractor.current[:__WeakRef_map__]
+    else
+      @@__map
+    end
+  end
+  private :weakref_map
 end
