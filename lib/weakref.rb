@@ -27,24 +27,24 @@ class WeakRef < Delegator
   class RefError < StandardError
   end
 
-  @@__map = ::ObjectSpace::WeakMap.new
-
   ##
   # Creates a weak reference to +orig+
 
   def initialize(orig)
     case orig
-    when true, false, nil
-      @delegate_sd_obj = orig
+    when true, false, nil, Symbol, Integer, Float, Complex, Rational
+      @weak = false
+      @store = orig
     else
-      @@__map[self] = orig
+      @weak = true
+      @store = ::ObjectSpace::WeakMap.new
+      @store[self] = orig
     end
-    super
   end
 
   def __getobj__(&_block) # :nodoc:
-    @@__map[self] or defined?(@delegate_sd_obj) ? @delegate_sd_obj :
-      Kernel::raise(RefError, "Invalid Reference - probably recycled", Kernel::caller(2))
+    return @store unless @weak
+    @store[self] or ::Kernel::raise(RefError, "Invalid Reference - probably recycled", ::Kernel::caller(2))
   end
 
   def __setobj__(obj) # :nodoc:
@@ -54,6 +54,6 @@ class WeakRef < Delegator
   # Returns true if the referenced object is still alive.
 
   def weakref_alive?
-    @@__map.key?(self) or defined?(@delegate_sd_obj)
+    !@weak || @store.key?(self)
   end
 end
