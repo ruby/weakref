@@ -69,4 +69,18 @@ class TestWeakRef < Test::Unit::TestCase
       150_000.times { WeakRef.new(a) }
     end;
   end
+
+  if defined?(Ractor)
+    def test_weakref_ractor_creatable
+      warning = Warning[:experimental]
+      Warning[:experimental] = false
+      bug22105 = '[ruby-core:125705]'
+      assert_nothing_raised(Ractor::RemoteError, bug22105) do
+        ractor = Ractor.new { WeakRef.new(Object.new) }
+        Ractor.select(ractor)
+      end
+    ensure
+      Warning[:experimental] = warning
+    end
+  end
 end
